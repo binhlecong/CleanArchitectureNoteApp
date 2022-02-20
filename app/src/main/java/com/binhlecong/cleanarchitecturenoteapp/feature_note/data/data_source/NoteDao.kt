@@ -1,7 +1,6 @@
 package com.binhlecong.cleanarchitecturenoteapp.feature_note.data.data_source
 
-import androidx.room.Dao
-import androidx.room.Query
+import androidx.room.*
 import com.binhlecong.cleanarchitecturenoteapp.feature_note.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
@@ -9,4 +8,13 @@ import kotlinx.coroutines.flow.Flow
 interface NoteDao {
     @Query("SELECT * from note")
     fun getNotes(): Flow<List<Note>>
+
+    @Query("SELECT * FROM note WHERE id = :id")
+    suspend fun getNoteById(id: Int): Note?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNote(note: Note)
+
+    @Delete
+    suspend fun deleteNote(note: Note)
 }
